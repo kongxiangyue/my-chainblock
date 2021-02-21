@@ -1,0 +1,99 @@
+
+---
+
+Organizations:  # 组织配置
+    - &OrdererOrg
+        Name: OrdererOrg # 组织的名字
+        ID: OrdererMSP # 组织的MSPID
+        MSPDir: crypto-config/ordererOrganizations/educhain.accurchain.com/msp #组织的证书相对位置（也就是我们刚才生成的crypto-config)
+
+    - &Org0 
+        Name: Org0MSP
+        ID: Org0MSP
+        MSPDir: crypto-config/peerOrganizations/org0.educhain.accurchain.com/msp
+        AnchorPeers: # 组织锚节点的配置
+            - Host: peer0.org0.educhain.accurchain.com
+              Port: 7051
+
+    - &Org1
+        Name: Org1MSP
+        ID: Org1MSP
+        MSPDir: crypto-config/peerOrganizations/org1.educhain.accurchain.com/msp
+        AnchorPeers:
+            - Host: peer0.org1.educhain.accurchain.com
+              Port: 7051
+
+    - &Org2
+        Name: Org2MSP
+        ID: Org2MSP
+        MSPDir: crypto-config/peerOrganizations/org2.educhain.accurchain.com/msp
+        AnchorPeers:
+            - Host: peer0.org2.educhain.accurchain.com
+              Port: 7051
+
+Orderer: &OrdererDefaults
+    # 可选的共识机制为solo和kafka，我们采用solo
+    OrdererType: solo # 共识机制
+    Addresses: #Orderer的 域名（用于连接）
+        - orderer.educhain.accurchain.com:7050 
+    BatchTimeout: 2s # 出块时间间隔
+
+    BatchSize: # 用于控制每个block的信息量
+        MaxMessageCount: 10 #每个区块的消息个数
+        AbsoluteMaxBytes: 99 MB #每个区块最大的信息大小
+        PreferredMaxBytes: 512 KB #每个区块包含的一条信息最大长度
+    #当共识算法是kafka的时候，还会有这个Broker
+    # Kafka:
+    #     # Brokers: A list of Kafka brokers to which the orderer connects
+    #     # NOTE: Use IP:port notation
+    #     Brokers:
+    #         - 127.0.0.1:9092
+    Organizations:
+
+
+################################################################################
+#
+#   SECTION: Application
+#
+#   - This section defines the values to encode into a config transaction or
+#   genesis block for application related parameters
+#
+################################################################################
+Application: &ApplicationDefaults
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the application side of the network
+    Organizations:
+
+
+
+################################################################################
+#
+#   Profile
+#
+#   - 写在这里的不同的配置，可以在configtxgen工具中作为参数被指定，工具就会按照配置生成
+#   相应的文件
+#
+################################################################################
+Profiles: # 联盟配置 联盟：在联盟内的组织才能对区块链进行操作
+
+    OneOrgOrdererGenesis: # 系统链 全局组织信息
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations: # 该系统链包含了Org0、Org1、Org2
+                    - *Org0
+                    - *Org1
+                    - *Org2
+
+    TwoOrgChannel: # 业务相关的联盟
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations: # 该业务链包含了Org0、Org1、Org2
+                - *Org0 
+                - *Org1
+                - *Org2

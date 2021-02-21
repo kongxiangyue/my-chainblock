@@ -1,0 +1,154 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.test.com:
+    container_name: orderer.test.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/msp:/var/hyperledger/orderer/msp
+        - ../crypto-config/ordererOrganizations/test.com/orderers/orderer.test.com/tls/:/var/hyperledger/orderer/tls
+        - orderer.test.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  node1.Organization1.test.com:
+    container_name: node1.Organization1.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node1.Organization1.test.com
+      - CORE_PEER_ADDRESS=node1.Organization1.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node1.Organization1.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node2.Organization1.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node1.Organization1.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization1.test.com/peers/node1.Organization1.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization1.test.com/peers/node1.Organization1.test.com/tls:/etc/hyperledger/fabric/tls
+        - node1.Organization1.test.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+
+  node2.Organization1.test.com:
+    container_name: node2.Organization1.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node2.Organization1.test.com
+      - CORE_PEER_ADDRESS=node2.Organization1.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node2.Organization1.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node1.Organization1.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node2.Organization1.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization1.test.com/peers/node2.Organization1.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization1.test.com/peers/node2.Organization1.test.com/tls:/etc/hyperledger/fabric/tls
+        - node2.Organization1.test.com:/var/hyperledger/production
+    ports:
+      - 8051:7051
+
+  node1.Organization2.test.com:
+    container_name: node1.Organization2.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node1.Organization2.test.com
+      - CORE_PEER_ADDRESS=node1.Organization2.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node1.Organization2.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node2.Organization2.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node1.Organization2.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization2.test.com/peers/node1.Organization2.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization2.test.com/peers/node1.Organization2.test.com/tls:/etc/hyperledger/fabric/tls
+        - node1.Organization2.test.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+
+  node2.Organization2.test.com:
+    container_name: node2.Organization2.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node2.Organization2.test.com
+      - CORE_PEER_ADDRESS=node2.Organization2.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node2.Organization2.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node1.Organization2.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node2.Organization2.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization2.test.com/peers/node2.Organization2.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization2.test.com/peers/node2.Organization2.test.com/tls:/etc/hyperledger/fabric/tls
+        - node2.Organization2.test.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+
+  node1.Organization3.test.com:
+    container_name: node1.Organization3.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node1.Organization3.test.com
+      - CORE_PEER_ADDRESS=node1.Organization3.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node1.Organization3.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node2.Organization3.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node1.Organization3.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization3MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization3.test.com/peers/node1.Organization3.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization3.test.com/peers/node1.Organization3.test.com/tls:/etc/hyperledger/fabric/tls
+        - node1.Organization3.test.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+
+  node2.Organization3.test.com:
+    container_name: node2.Organization3.test.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=node2.Organization3.test.com
+      - CORE_PEER_ADDRESS=node2.Organization3.test.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=node2.Organization3.test.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=node1.Organization3.test.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=node2.Organization3.test.com:7051
+      - CORE_PEER_LOCALMSPID=Organization3MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/Organization3.test.com/peers/node2.Organization3.test.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/Organization3.test.com/peers/node2.Organization3.test.com/tls:/etc/hyperledger/fabric/tls
+        - node2.Organization3.test.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+

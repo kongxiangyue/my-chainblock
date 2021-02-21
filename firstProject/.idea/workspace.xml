@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b99243a0-53ab-4acc-a6d4-d5b5a66120ac" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="firstProject" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+        <option value="Go Application" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/go" />
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1fcmliF86JA0uLfTkMqm58Qi2VJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go Application" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="go.vgo" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/application/farbicSDK" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build firstProject/application" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="firstProject" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/application/main.go" />
+      <package value="firstProject/application" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build firstProject/application" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b99243a0-53ab-4acc-a6d4-d5b5a66120ac" name="Default Changelist" comment="" />
+      <created>1596530842755</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596530842755</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+    <proxy>https://goproxy.cn,direct</proxy>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="301" y="32" key="#GOROOT" timestamp="1596556835090">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="233" y="7" key="#GOROOT/0.0.1280.689@0.0.1280.689" timestamp="1596530859743" />
+    <state x="301" y="32" key="#GOROOT/65.24.1295.744@65.24.1295.744" timestamp="1596556835090" />
+    <state x="282" y="182" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1596613623276">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="282" y="182" key="#com.intellij.fileTypes.FileTypeChooser/65.24.1295.744@65.24.1295.744" timestamp="1596613623276" />
+    <state x="225" y="153" key="EditFileWatcherDialog" timestamp="1596528245331">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="225" y="153" key="EditFileWatcherDialog/65.24.1295.744@65.24.1295.744" timestamp="1596528245331" />
+    <state width="1243" height="191" key="GridCell.Tab.0.bottom" timestamp="1596590818542">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state width="1243" height="191" key="GridCell.Tab.0.bottom/65.24.1295.744@65.24.1295.744" timestamp="1596590818542" />
+    <state width="1243" height="191" key="GridCell.Tab.0.center" timestamp="1596590818540">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state width="1243" height="191" key="GridCell.Tab.0.center/65.24.1295.744@65.24.1295.744" timestamp="1596590818540" />
+    <state width="1243" height="191" key="GridCell.Tab.0.left" timestamp="1596590818538">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state width="1243" height="191" key="GridCell.Tab.0.left/65.24.1295.744@65.24.1295.744" timestamp="1596590818538" />
+    <state width="1243" height="191" key="GridCell.Tab.0.right" timestamp="1596590818541">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state width="1243" height="191" key="GridCell.Tab.0.right/65.24.1295.744@65.24.1295.744" timestamp="1596590818541" />
+    <state x="208" y="24" key="SettingsEditor" timestamp="1596556856922">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="141" y="0" key="SettingsEditor/0.0.1280.689@0.0.1280.689" timestamp="1596530886108" />
+    <state x="208" y="24" key="SettingsEditor/65.24.1295.744@65.24.1295.744" timestamp="1596556856922" />
+    <state x="371" y="24" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596644076999">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="371" y="24" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/65.24.1295.744@65.24.1295.744" timestamp="1596644076999" />
+    <state x="313" y="83" width="1047" height="674" key="find.popup" timestamp="1596646547804">
+      <screen x="65" y="24" width="1295" height="744" />
+    </state>
+    <state x="313" y="83" width="1047" height="674" key="find.popup/65.24.1295.744@65.24.1295.744" timestamp="1596646547804" />
+    <state x="293" y="60" width="693" height="628" key="search.everywhere.popup" timestamp="1596553890218">
+      <screen x="0" y="0" width="1280" height="689" />
+    </state>
+    <state x="293" y="60" width="693" height="628" key="search.everywhere.popup/0.0.1280.689@0.0.1280.689" timestamp="1596553890218" />
+    <state x="361" y="89" width="701" height="678" key="search.everywhere.popup/65.24.1295.744@65.24.1295.744" timestamp="1596526511705" />
+  </component>
+</project>
