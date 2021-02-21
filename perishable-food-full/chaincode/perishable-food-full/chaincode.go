@@ -23,7 +23,7 @@ type PerishableFood struct {
 // 账户
 type Account struct {
 	Id      string  `json:"id"`      //账号ID
-	Name    string  `json:"name1"`    //账号名
+	Name    string  `json:"name"`    //账号名
 	Balance float64 `json:"balance"` //余额
 }
 
