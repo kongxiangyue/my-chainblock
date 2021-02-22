@@ -1,0 +1,162 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.educhain.accurchain.com:
+    container_name: orderer.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    volumes:
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto-config/ordererOrganizations/educhain.accurchain.com/orderers/orderer.educhain.accurchain.com/msp:/var/hyperledger/orderer/msp
+        - ../crypto-config/ordererOrganizations/educhain.accurchain.com/orderers/orderer.educhain.accurchain.com/tls/:/var/hyperledger/orderer/tls
+        - orderer.educhain.accurchain.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  peer0.org0.educhain.accurchain.com:
+    container_name: peer0.org0.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.org0.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer0.org0.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org0.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org0.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org0.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org0MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org0.educhain.accurchain.com/peers/peer0.org0.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org0.educhain.accurchain.com/peers/peer0.org0.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.org0.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      #- 7052:7052
+
+  peer1.org0.educhain.accurchain.com:
+    container_name: peer1.org0.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.org0.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer1.org0.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org0.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org0.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org0.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org0MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org0.educhain.accurchain.com/peers/peer1.org0.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org0.educhain.accurchain.com/peers/peer1.org0.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.org0.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 8051:7051
+      #- 8052:7052
+
+  peer0.org1.educhain.accurchain.com:
+    container_name: peer0.org1.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.org1.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer0.org1.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org1.educhain.accurchain.com/peers/peer0.org1.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org1.educhain.accurchain.com/peers/peer0.org1.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.org1.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      #- 9052:7052
+
+  peer1.org1.educhain.accurchain.com:
+    container_name: peer1.org1.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.org1.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer1.org1.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org1.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org1.educhain.accurchain.com/peers/peer1.org1.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org1.educhain.accurchain.com/peers/peer1.org1.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.org1.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      #- 10052:7052
+
+
+  peer0.org2.educhain.accurchain.com:
+    container_name: peer0.org2.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.org2.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer0.org2.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org2.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org2.educhain.accurchain.com/peers/peer0.org2.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org2.educhain.accurchain.com/peers/peer0.org2.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.org2.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      #- 11052:7052
+
+  peer1.org2.educhain.accurchain.com:
+    container_name: peer1.org2.educhain.accurchain.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.org2.educhain.accurchain.com
+      - CORE_PEER_ADDRESS=peer1.org2.educhain.accurchain.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.org2.educhain.accurchain.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.educhain.accurchain.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.educhain.accurchain.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/org2.educhain.accurchain.com/peers/peer1.org2.educhain.accurchain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/org2.educhain.accurchain.com/peers/peer1.org2.educhain.accurchain.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.org2.educhain.accurchain.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+      #- 12052:7052
+
+
