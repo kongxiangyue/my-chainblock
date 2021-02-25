@@ -13,7 +13,6 @@ services:
       # the following setting starts chaincode containers on the same
       # bridge network as the peers
       # https://docs.docker.com/compose/networking/
-      #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_byfn
       - FABRIC_LOGGING_SPEC=INFO
       #- FABRIC_LOGGING_SPEC=DEBUG
       #- CORE_PEER_TLS_ENABLED=true
@@ -27,7 +26,7 @@ services:
       - CORE_CHAINCODE_LOGGING_LEVEL=INFO
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/peer/msp # msp证书（节点证书）
       - CORE_LEDGER_STATE_STATEDATABASE=goleveldb # 状态数据库的存储引擎（or CouchDB）
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=deploy_default # cc与peer节点使用同一个网络
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=deploy_byfn  # cc与peer节点使用同一个网络
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
 
