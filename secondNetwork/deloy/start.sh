@@ -30,7 +30,7 @@ configtxgen -profile TwoOrgsChannel \
 echo "四 生成锚节点配置文件"
 echo "生成Organization0MSP锚节点配置文件"
 configtxgen -profile TwoOrgsChannel \
--outputAnchorPeersUpdate ./channel-artifacts/Organization1MSPanchors.tx \
+-outputAnchorPeersUpdate ./channel-artifacts/Organization0MSPanchors.tx \
 -channelID $CHANNEL_NAME \
 -asOrg Org0MSP
 
@@ -43,7 +43,7 @@ configtxgen -profile TwoOrgsChannel \
 
 echo "生成Organization2MSP锚节点配置文件"
 configtxgen -profile TwoOrgsChannel \
--outputAnchorPeersUpdate ./channel-artifacts/Organization1MSPanchors.tx \
+-outputAnchorPeersUpdate ./channel-artifacts/Organization2MSPanchors.tx \
 -channelID $CHANNEL_NAME \
 -asOrg Org2MSP
 
@@ -97,21 +97,55 @@ cli peer channel join -b $CHANNEL_NAME.block
 
 
 
+echo "八 根据锚节点配置文件更新锚节点"
+echo "更新Org1锚节点"
+docker exec cli peer channel update -o orderer.educhain.accurchain.com:7050 -c $CHANNEL_NAME \
+-f ./channel-artifacts/Organization1MSPanchors.tx
+
+
+echo "更新Org0锚节点"
+docker exec \
+-e CORE_PEER_ADDRESS=peer0.org0.educhain.accurchain.com:7051 \
+-e CORE_PEER_LOCALMSPID=Org0MSP \
+-e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org0.educhain.accurchain.com/users/Admin@org0.educhain.accurchain.com/msp \
+cli peer channel update -o orderer.educhain.accurchain.com:7050 -c $CHANNEL_NAME \
+-f ./channel-artifacts/Organization0MSPanchors.tx
+
+
+echo "更新Org2锚节点"
+docker exec \
+-e CORE_PEER_ADDRESS=peer0.org2.educhain.accurchain.com:7051 \
+-e CORE_PEER_LOCALMSPID=Org2MSP \
+-e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.educhain.accurchain.com/users/Admin@org2.educhain.accurchain.com/msp \
+cli peer channel update -o orderer.educhain.accurchain.com:7050 -c $CHANNEL_NAME \
+-f ./channel-artifacts/Organization2MSPanchors.tx
+
+
+echo "九 安装链码"
+echo "将链码安装到peer0.org1"
+docker exec cli peer chaincode install -n food -v 1.0 -l golang \
+-p "github.com/chaincode/perishable-food-full/"
 
 
 
+echo "将链码安装到peer0.org0"
+docker exec -e CORE_PEER_ADDRESS=peer0.org0.educhain.accurchain.com:7051 \
+-e CORE_PEER_LOCALMSPID=Org0MSP \
+-e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org0.educhain.accurchain.com/users/Admin@org0.educhain.accurchain.com/msp \
+cli peer chaincode install -n food -v 1.0 -l golang \
+-p "github.com/chaincode/perishable-food-full/"
 
 
+echo "将链码安装到peer0.org2"
+docker exec -e CORE_PEER_ADDRESS=peer0.org2.educhain.accurchain.com:7051 \
+-e CORE_PEER_LOCALMSPID=Org2MSP \
+-e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.educhain.accurchain.com/users/Admin@org2.educhain.accurchain.com/msp \
+cli peer chaincode install -n food -v 1.0 -l golang \
+-p "github.com/chaincode/perishable-food-full/"
 
 
-
-
-
-
-
-
-
-
-
-
+echo "第十步： 实例化链码"
+docker exec cli peer chaincode instantiate -o orderer.educhain.accurchain.com:7050 \
+-C $CHANNEL_NAME -n food -l golang -v 1.0 -c '{"Args":["init","a","100","b","200"]}' \
+-P "AND ('Organization1MSP.peer','Organization2MSP.peer','Organization3MSP.peer')"
 
