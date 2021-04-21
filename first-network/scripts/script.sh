@@ -37,13 +37,13 @@ fi
 echo "Channel name : "$CHANNEL_NAME
 
 # import utils
-. scripts/utils.sh
+. scripts/utils.sh #只是导入   by kong
 
 createChannel() {
 	setGlobals 0 1
 
 	if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-                set -x
+                set -x  ##step 6  corecode 不使用tls by kong
 		peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
 		res=$?
                 set +x
@@ -60,7 +60,7 @@ createChannel() {
 }
 
 joinChannel () {
-	for org in 1 2; do
+	for org in 1 2; do   #step 7  corecode 有多少个节点就循环多少次  by kong
 	    for peer in 0 1; do
 		joinChannelWithRetry $peer $org
 		echo "===================== peer${peer}.org${org} joined channel '$CHANNEL_NAME' ===================== "
@@ -72,33 +72,33 @@ joinChannel () {
 
 ## Create channel
 echo "Creating channel..."
-createChannel
+createChannel  #step 6 by kong
 
 ## Join all the peers to the channel
 echo "Having all peers join the channel..."
-joinChannel
+joinChannel   #step 7 by kong
 
 ## Set the anchor peers for each org in the channel
 echo "Updating anchor peers for org1..."
-updateAnchorPeers 0 1
+updateAnchorPeers 0 1  #step 8 by kong 在utils.sh 有多少个组织就updateAnchorPeers多少次
 echo "Updating anchor peers for org2..."
 updateAnchorPeers 0 2
 
 if [ "${NO_CHAINCODE}" != "true" ]; then
 
 	## Install chaincode on peer0.org1 and peer0.org2
-	echo "Installing chaincode on peer0.org1..."
+	echo "Installing chaincode on peer0.org1..."#step 9 各组织安装链码（智能合约） 在utils.sh
 	installChaincode 0 1
-	echo "Install chaincode on peer0.org2..."
+	echo "Install chaincode on peer0.org2..."#step 9 各组织安装链码（智能合约）在utils.sh
 	installChaincode 0 2
 
 	# Instantiate chaincode on peer0.org2
-	echo "Instantiating chaincode on peer0.org2..."
+	echo "Instantiating chaincode on peer0.org2..."#step 10 各组织实例化链码（智能合约）在utils.sh
 	instantiateChaincode 0 2
 
 	# Query chaincode on peer0.org1
 	echo "Querying chaincode on peer0.org1..."
-	chaincodeQuery 0 1 100
+	chaincodeQuery 0 1 100  
 
 	# Invoke chaincode on peer0.org1 and peer0.org2
 	echo "Sending invoke transaction on peer0.org1 peer0.org2..."
@@ -108,7 +108,7 @@ if [ "${NO_CHAINCODE}" != "true" ]; then
 	echo "Installing chaincode on peer1.org2..."
 	installChaincode 1 2
 
-	# Query on chaincode on peer1.org2, check if the result is 90
+	# Query on chaincode on peer1.org2, check if the result is 90 #step 10 各组织实例化链码（智能合约）在utils.sh
 	echo "Querying chaincode on peer1.org2..."
 	chaincodeQuery 1 2 90
 	

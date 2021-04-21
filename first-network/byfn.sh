@@ -154,9 +154,9 @@ function networkUp() {
   checkPrereqs
   # generate artifacts if they don't exist
   if [ ! -d "crypto-config" ]; then
-    generateCerts
-    replacePrivateKey
-    generateChannelArtifacts
+    generateCerts  #step 1 by kong
+    replacePrivateKey #这一步应该是不需要的
+    generateChannelArtifacts #step 2-4 by kong
   fi
   COMPOSE_FILES="-f ${COMPOSE_FILE}"
   if [ "${CERTIFICATE_AUTHORITIES}" == "true" ]; then
@@ -172,7 +172,7 @@ function networkUp() {
   if [ "${IF_COUCHDB}" == "couchdb" ]; then
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_COUCH}"
   fi
-  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1
+  IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} up -d 2>&1 #step 5 by kong
   docker ps -a
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to start network"
@@ -191,7 +191,7 @@ function networkUp() {
     sleep 14
   fi
 
-  # now run the end to end script
+  # now run the end to end script 接下来的命令都是进入 cli容器进行的，by kong
   docker exec cli scripts/script.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE $NO_CHAINCODE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Test failed"
@@ -359,7 +359,7 @@ function generateCerts() {
     rm -Rf crypto-config
   fi
   set -x
-  cryptogen generate --config=./crypto-config.yaml
+  cryptogen generate --config=./crypto-config.yaml #corecode by kong
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -422,8 +422,8 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   echo "CONSENSUS_TYPE="$CONSENSUS_TYPE
-  set -x
-  if [ "$CONSENSUS_TYPE" == "solo" ]; then
+  set -x  #step 2 by kong  三种方式，我们使用solo
+  if [ "$CONSENSUS_TYPE" == "solo" ]; then #corecode by kong
     configtxgen -profile TwoOrgsOrdererGenesis -channelID $SYS_CHANNEL -outputBlock ./channel-artifacts/genesis.block
   elif [ "$CONSENSUS_TYPE" == "kafka" ]; then
     configtxgen -profile SampleDevModeKafka -channelID $SYS_CHANNEL -outputBlock ./channel-artifacts/genesis.block
@@ -444,7 +444,7 @@ function generateChannelArtifacts() {
   echo "#################################################################"
   echo "### Generating channel configuration transaction 'channel.tx' ###"
   echo "#################################################################"
-  set -x
+  set -x #step 3  corecode by kong
   configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
   res=$?
   set +x
@@ -457,7 +457,7 @@ function generateChannelArtifacts() {
   echo "#################################################################"
   echo "#######    Generating anchor peer update for Org1MSP   ##########"
   echo "#################################################################"
-  set -x
+  set -x #step 4 (1) corecode by kong 有多少个组织就有多少个锚节点
   configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
   res=$?
   set +x
@@ -470,7 +470,7 @@ function generateChannelArtifacts() {
   echo "#################################################################"
   echo "#######    Generating anchor peer update for Org2MSP   ##########"
   echo "#################################################################"
-  set -x
+  set -x #step 4 (2) corecode by kong 有多少个组织就有多少个锚节点
   configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
     ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
   res=$?
