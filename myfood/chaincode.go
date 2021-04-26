@@ -140,23 +140,33 @@ func (t *PerishableFood) Init(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 
 		// 序列化对象
+
 		commodityBytes, err := json.Marshal(commodity)
 		if err != nil {
 			return shim.Error(fmt.Sprintf("marshal commodity error %s", err))
 		}
+
+		fmt.Printf( "by kong json string %s", commodityBytes)
+
+
 
 		var key string// by kong 以"commodity"+id为key
 		if val, err := stub.CreateCompositeKey("commodity", []string{commodity.Id}); err != nil {
 			return shim.Error(fmt.Sprintf("create key error %s", err))
 		} else {
 			key = val
+			fmt.Printf( "by kong CreateCompositeKey %s", key)
+
 		}
+
+
 
 		if err := stub.PutState(key, commodityBytes); err != nil {
 			return shim.Error(fmt.Sprintf("put commodity error %s", err))
 		}
 	}
 
+	fmt.Print( "by kong Init success")
 	return shim.Success(nil)
 }
 
@@ -217,6 +227,7 @@ func createCommodity(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		return shim.Error(fmt.Sprintf("create key error %s", err))
 	} else {
 		key = val
+		fmt.Printf( "by kong createCommodity:key %s", key)
 	}
 
 	// 验证数据是否存在 应该存在 or 不应该存在
@@ -265,13 +276,15 @@ func createCommodity(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		return shim.Error(fmt.Sprintf("marshal commodity error %s", err))
 	}
 
+	fmt.Printf( "by kong createCommodity json string %s", commodityBytes)
+
 	//写入区块链账本
 	if err := stub.PutState(key, commodityBytes); err != nil {
 		return shim.Error(fmt.Sprintf("put commodity error %s", err))
 	}
 
 	// 成功返回
-	return shim.Success(nil)
+	return shim.Success(nil)// 2021的样题要求返回200 by kong
 }
 
 //新建订单
