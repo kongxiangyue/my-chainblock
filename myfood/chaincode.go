@@ -146,7 +146,7 @@ func (t *PerishableFood) Init(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error(fmt.Sprintf("marshal commodity error %s", err))
 		}
 
-		fmt.Printf( "by kong json string %s", commodityBytes)
+		fmt.Printf( "-by kong json string %s\n", commodityBytes)
 
 
 
@@ -155,7 +155,7 @@ func (t *PerishableFood) Init(stub shim.ChaincodeStubInterface) pb.Response {
 			return shim.Error(fmt.Sprintf("create key error %s", err))
 		} else {
 			key = val
-			fmt.Printf( "by kong CreateCompositeKey %s", key)
+			fmt.Printf( "-by kong CreateCompositeKey %s\n", key)
 
 		}
 
@@ -166,7 +166,7 @@ func (t *PerishableFood) Init(stub shim.ChaincodeStubInterface) pb.Response {
 		}
 	}
 
-	fmt.Print( "by kong Init success")
+	fmt.Print( "-by kong Init success\n")
 	return shim.Success(nil)
 }
 
@@ -227,7 +227,7 @@ func createCommodity(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		return shim.Error(fmt.Sprintf("create key error %s", err))
 	} else {
 		key = val
-		fmt.Printf( "by kong createCommodity:key %s", key)
+		fmt.Printf( "-by kong createCommodity:key %s\n", key)
 	}
 
 	// 验证数据是否存在 应该存在 or 不应该存在
@@ -276,7 +276,7 @@ func createCommodity(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 		return shim.Error(fmt.Sprintf("marshal commodity error %s", err))
 	}
 
-	fmt.Printf( "by kong createCommodity json string %s", commodityBytes)
+	fmt.Printf( "-by kong createCommodity json string %s\n", commodityBytes)
 
 	//写入区块链账本
 	if err := stub.PutState(key, commodityBytes); err != nil {
@@ -284,7 +284,7 @@ func createCommodity(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	}
 
 	// 成功返回
-	return shim.Success(nil)// 2021的样题要求返回200 by kong
+	return shim.Success(commodityBytes)// 2021的样题要求返回200 by kong
 }
 
 //新建订单
@@ -424,6 +424,7 @@ func queryCommodityList(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 		return shim.Error(fmt.Sprintf("marshal error: %s", err))
 	}
 
+	fmt.Printf( "-by kong CreateCompositeKey %s\n", bytes)
 	return shim.Success(bytes)
 }
 
