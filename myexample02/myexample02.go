@@ -63,13 +63,13 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("myex02 Invoke")
 	funname, args := stub.GetFunctionAndParameters()
 	if funname == "create" {
-		t.create(stub, args)
+		return t.create(stub, args)
 	} else if funname == "query" {
-		t.query(stub, args)
+		return t.query(stub, args)
 	} else if funname == "queryall" {
-		t.queryall(stub, args)
+		return t.queryall(stub, args)
 	}else if funname == "update" {
-		t.update(stub, args)
+		return t.update(stub, args)
 	}
 
 
@@ -85,12 +85,15 @@ func (t *SimpleChaincode) create(stub shim.ChaincodeStubInterface, args []string
 	key = args[0]
 	val = args[1]
 
+	fmt.Println("before Put val:", val,"\n")
 
-	fmt.Printf("%s-%s", key, val)
+
+	ret := fmt.Sprintf("%s-%s", key, val)
+	fmt.Println(ret, "\n")
 	stub.PutState(key, []byte(val))
 
 
-	return shim.Error("create error")
+	return shim.Success([]byte(ret))
 }
 
 
@@ -106,8 +109,7 @@ func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 		return shim.Error("query GetState error")
 	}
 
-
-
+	fmt.Println("query:value:", val, "\n")
 	// {"key":"A","value":"100"}
 
 	mystruct := &Mystruct{
@@ -129,7 +131,12 @@ func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 func (t *SimpleChaincode) queryall(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 
-	return shim.Error("queryall error")
+	keys := make([]string, 0)
+
+	fmt.Print("queryall keys len",len(keys),"\n")
+	stub.GetStateByPartialCompositeKey("", keys)
+
+	return shim.Success(nil)
 }
 
 func (t *SimpleChaincode) update(stub shim.ChaincodeStubInterface, args []string) pb.Response {
