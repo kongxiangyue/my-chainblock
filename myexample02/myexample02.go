@@ -48,11 +48,15 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 
 	var key,val string
 
-	key = args[0]
+	key, err := stub.CreateCompositeKey("person", []string{args[0]})
+	if err != nil {
+		return shim.Error("CreateCompositeKey error")
+	}
+
 	val = args[1]
 
 
-	fmt.Printf("%s-%s", key, val)
+	fmt.Printf("%s-%s\n", key, val)
 	stub.PutState(key, []byte(val))
 
 
@@ -69,7 +73,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if funname == "queryall" {
 		return t.queryall(stub, args)
 	}else if funname == "update" {
-		return t.update(stub, args)
+		return t.create(stub, args)
 	}
 
 
@@ -82,13 +86,16 @@ func (t *SimpleChaincode) create(stub shim.ChaincodeStubInterface, args []string
 
 	var key,val string
 
-	key = args[0]
+	key, err := stub.CreateCompositeKey("person", []string{args[0]})
+	if err != nil {
+		return shim.Error("CreateCompositeKey error")
+	}
 	val = args[1]
 
 	fmt.Println("before Put val:", val,"\n")
 
 
-	ret := fmt.Sprintf("%s-%s", key, val)
+	ret := fmt.Sprintf("%s-%s\n", key, val)
 	fmt.Println(ret, "\n")
 	stub.PutState(key, []byte(val))
 
@@ -102,7 +109,10 @@ func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 	var key string
 	var err error
 
-	key = args[0]
+	key, err = stub.CreateCompositeKey("person", []string{args[0]})
+	if err != nil {
+		return shim.Error("CreateCompositeKey error")
+	}
 
 	val, err := stub.GetState(key)
 	if err != nil {
@@ -113,7 +123,7 @@ func (t *SimpleChaincode) query(stub shim.ChaincodeStubInterface, args []string)
 	// {"key":"A","value":"100"}
 
 	mystruct := &Mystruct{
-		Key: key,
+		Key: args[0],
 		Value: string(val[:]),
 	}
 
@@ -133,16 +143,40 @@ func (t *SimpleChaincode) queryall(stub shim.ChaincodeStubInterface, args []stri
 
 	keys := make([]string, 0)
 
+	result, err := stub.GetStateByPartialCompositeKey("person", keys)
+	if err != nil {
+		return shim.Error("queryall result error")
+	}
+	defer result.Close()
 	fmt.Print("queryall keys len",len(keys),"\n")
-	stub.GetStateByPartialCompositeKey("", keys)
 
-	return shim.Success(nil)
+	mystructlist := make([]*Mystruct, 0)
+	for result.HasNext() {
+		val,err := result.Next()
+		if err != nil {
+			shim.Error("queryall result.Next error")
+		}
+
+		mystruct := &Mystruct{
+			Key: val.GetKey(),
+			Value: string(val.GetValue()[:]),
+		}
+
+		mystructlist = append(mystructlist, mystruct)
+	}
+
+	jsonbytes,err :=  json.Marshal(mystructlist)
+	if err != nil {
+		return shim.Error("queryall json error")
+	}
+
+	fmt.Printf("query json %s \n", jsonbytes)
+
+	return shim.Success(jsonbytes)
 }
 
 func (t *SimpleChaincode) update(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-
-
-	return shim.Error("update error")
+	return shim.Success(nil)
 }
 
 
