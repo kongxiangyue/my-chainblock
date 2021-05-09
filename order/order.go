@@ -21,7 +21,8 @@ type Status struct {
 	Confirm           string //确认
 	Apply_loan        string //申请贷款
 	Accept_loan       string //接受贷款
-	Confirm_payment   string //确认货款
+	Refuse_loan       string //拒绝贷款
+	Confirm_payment   string //确认付款
 	Deliver           string //发货
 	Receive           string //确认收货
 	Repayment         string //还款
@@ -35,7 +36,8 @@ func newStatus() *Status {
 		Confirm           :"确认",
 		Apply_loan        :"申请贷款",
 		Accept_loan       :"接受贷款",
-		Confirm_payment   :"确认货款",
+		Confirm_payment   :"确认付款",
+		Refuse_loan       :"拒绝贷款",
 		Deliver           :"发货",
 		Receive           :"确认收货",
 		Repayment         :"还款",
@@ -52,6 +54,7 @@ var statusMap = map[string]string{
 	"Apply_loan"        : enumStatus.Apply_loan       ,
 	"Accept_loan"       : enumStatus.Accept_loan      ,
 	"Confirm_payment"   : enumStatus.Confirm_payment  ,
+	"Refuse_loan"       : enumStatus.Refuse_loan      ,
 	"Deliver"           : enumStatus.Deliver          ,
 	"Receive"           : enumStatus.Receive          ,
 	"Repayment"         : enumStatus.Repayment        ,
