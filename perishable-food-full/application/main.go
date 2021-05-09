@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"./blockchain"
-	"./controller"
-	"./fbeecloud"
-	"./repository"// by kong 更正了一下路径
+	"application/blockchain"
+	"application/controller"
+	"application/fbeecloud"
+	"application/repository"// by kong 更正了一下路径
 	"github.com/gin-gonic/gin"
 )
 
